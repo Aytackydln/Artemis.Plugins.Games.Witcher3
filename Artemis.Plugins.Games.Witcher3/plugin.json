@@ -1,0 +1,15 @@
+{
+    "Guid": "9B1746EF-C02C-47CC-87EC-F823F9D57E46",
+    "Name": "Artemis.Plugins.Games.Witcher3",
+    "Description": "Provides game state data for witcher 3",
+    "Author": "Aytackydln",
+    "Website": "https://github.com/Aytackydln",
+    "Repository": "https://github.com/Aytackydln/Artemis.Plugins.Games.Witcher3",
+    "Icon": "QuestionMark",
+    "Version": "1.0.0.0",
+    "Main": "Artemis.Plugins.Games.Witcher3.dll",
+    "AutoEnableProperties": true,
+    "RequiresAdmin": false,
+    "Platforms": "Windows,Linux,OSX",
+    "Api": "1.0.0"
+}
