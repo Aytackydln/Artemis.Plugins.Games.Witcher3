@@ -2,11 +2,13 @@
 
 public sealed class Witcher3GameStateListener : IDisposable
 {
-    public event EventHandler<Witcher3StateEventArgs> GameStateChanged;
+    public event EventHandler<Witcher3StateEventArgs>? GameStateChanged;
 
     private const string ArtemisString = "[Artemis]";
 
-    private static readonly string ConfigFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\The Witcher 3";
+    private static readonly string ConfigFolder =
+        Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\The Witcher 3";
+
     private static readonly string ConfigFile = Path.Combine(ConfigFolder, "user.settings");
     private static readonly string Dx12ConfigFile = Path.Combine(ConfigFolder, "dx12user.settings");
 
@@ -26,6 +28,7 @@ public sealed class Witcher3GameStateListener : IDisposable
             };
             _watcher.Changed += (_, _) => ReadGameState(ConfigFile);
         }
+
         if (Directory.Exists(ConfigFolder))
         {
             _dx12Watcher = new FileSystemWatcher
@@ -50,12 +53,17 @@ public sealed class Witcher3GameStateListener : IDisposable
 
     private void ReadGameState(string configFile)
     {
+        if (GameStateChanged == null)
+        {
+            return;
+        }
+
         if (!File.Exists(configFile))
             return;
-        
+
         var content = ReadFile(configFile);
         var player = ParseContent(content);
-            
+
         GameStateChanged.Invoke(this, new Witcher3StateEventArgs(player));
     }
 
@@ -67,27 +75,16 @@ public sealed class Witcher3GameStateListener : IDisposable
 
     private Witcher3GameState ParseContent(string content)
     {
-
         var artemisSection = IniReader.GetSection(content, ArtemisString);
-        var player = new Witcher3Player
-        {
-            Toxicity = IniReader.GetInt(artemisSection, "Toxicity"),
-            Stamina = IniReader.GetInt(artemisSection, "Stamina"),
-            MaximumHealth = IniReader.GetInt(artemisSection, "MaxHealth"),
-            CurrentHealth = IniReader.GetInt(artemisSection, "CurrHealth")
-        };
 
-        var enumText = artemisSection.FirstOrDefault(d => d.Contains("ActiveSign"))?.Split('_').Last() ?? "";
-        player.ActiveSign = TryParseOr(enumText, true, WitcherSign.None);
-        
-        return new Witcher3GameState
-        {
-            Player = player
-        };
-    }
+        var player = new Witcher3Player(toxicity: IniReader.GetInt(artemisSection, "Toxicity"),
+            stamina: IniReader.GetInt(artemisSection, "Stamina"),
+            maximumHealth: IniReader.GetInt(artemisSection, "MaxHealth"),
+            currentHealth: IniReader.GetInt(artemisSection, "CurrHealth"),
+            activeSign: IniReader.GetEnum(artemisSection, "ActiveSign", WitcherSign.None)
+        );
 
-    private static T TryParseOr<T>(string value, bool ignoreCase = true, T defaultValue = default) where T : struct, IConvertible {
-        return Enum.TryParse<T>(value, ignoreCase, out var res) ? res : defaultValue;
+        return new Witcher3GameState(player);
     }
 
     public void Dispose()

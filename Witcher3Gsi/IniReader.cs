@@ -24,11 +24,20 @@ internal static class IniReader
     {
         try
         {
-            return int.Parse(data.FirstOrDefault(d => d.Contains(name)).Split('=')[1].Split('.')[0]);
+            var first = data.FirstOrDefault(d => d.Contains(name))
+                .Split('=')[1]
+                .Split('.')[0];
+            return int.Parse(first);
         }
         catch
         {
             return -1;
         }
+    }
+
+    internal static T GetEnum<T>(string[] artemisSection, string activeSign, T defaultValue = default) where T : struct, IConvertible
+    {
+        var enumText = artemisSection.FirstOrDefault(d => d.Contains(activeSign))?.Split('_').Last() ?? "";
+        return Enum.TryParse<T>(enumText, true, out var res) ? res : defaultValue;
     }
 }

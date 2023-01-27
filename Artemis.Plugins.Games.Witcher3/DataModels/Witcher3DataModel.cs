@@ -5,5 +5,5 @@ namespace Artemis.Plugins.Games.Witcher3.DataModels;
 
 public class Witcher3DataModel : DataModel
 {
-    public Witcher3Player Player { get; set; }
+    public Witcher3Player Player { get; set; } = new();
 }
