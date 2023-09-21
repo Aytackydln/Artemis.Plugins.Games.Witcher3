@@ -84,7 +84,14 @@ public sealed class Witcher3GameStateListener : IDisposable
             activeSign: IniReader.GetEnum(artemisSection, "ActiveSign", WitcherSign.None)
         );
 
-        return new Witcher3GameState(player);
+        var world = new Witcher3World(
+            isNight: IniReader.GetInt(artemisSection, "IsNight") == 1,
+            dayNightTimeLeftHours: IniReader.GetInt(artemisSection, "DayNightTimeLeftHours"),
+            dayNightTimeLeftMinutes: IniReader.GetInt(artemisSection, "DayNightTimeLeftMinutes"),
+            dayNightTimeLeftSeconds: IniReader.GetInt(artemisSection, "DayNightTimeLeftSeconds")
+        );
+
+        return new Witcher3GameState(player, world);
     }
 
     public void Dispose()

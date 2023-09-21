@@ -14,6 +14,7 @@ public class Witcher3Module : Module<Witcher3DataModel>
     private void Witcher3ListenerOnGameStateChanged(object? sender, Witcher3StateEventArgs e)
     {
         DataModel.Player = e.GameState.Player;
+        DataModel.World = e.GameState.World;
     }
 
     public override void ModuleActivated(bool isOverride)

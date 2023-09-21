@@ -1,15 +1,22 @@
-﻿namespace Witcher3Gsi;
+﻿using JetBrains.Annotations;
 
+namespace Witcher3Gsi;
+
+[PublicAPI]
 public class Witcher3GameState
 {
     public Witcher3Player Player { get; }
     
-    internal Witcher3GameState(Witcher3Player player)
+    public Witcher3World World { get; }
+    
+    internal Witcher3GameState(Witcher3Player player, Witcher3World world)
     {
         Player = player;
+        World = world;
     }
 }
 
+[PublicAPI]
 public class Witcher3Player
 {
     public Witcher3Player(){}
@@ -30,6 +37,8 @@ public class Witcher3Player
     public WitcherSign ActiveSign { get; } = WitcherSign.None;
 }
 
+[UsedImplicitly]
+[PublicAPI]
 public enum WitcherSign
 {
     None,
@@ -38,4 +47,23 @@ public enum WitcherSign
     Igni,
     Quen,
     Yrden
+}
+
+[PublicAPI]
+public class Witcher3World
+{
+    public bool IsNight { get; }
+    public long DayNightTimeLeftHours { get; }
+    public long DayNightTimeLeftMinutes { get; }
+    public long DayNightTimeLeftSeconds { get; }
+
+    public Witcher3World() { }
+
+    public Witcher3World(bool isNight, long dayNightTimeLeftHours, long dayNightTimeLeftMinutes, long dayNightTimeLeftSeconds)
+    {
+        IsNight = isNight;
+        DayNightTimeLeftHours = dayNightTimeLeftHours;
+        DayNightTimeLeftMinutes = dayNightTimeLeftMinutes;
+        DayNightTimeLeftSeconds = dayNightTimeLeftSeconds;
+    }
 }
