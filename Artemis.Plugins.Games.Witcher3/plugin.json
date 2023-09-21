@@ -6,7 +6,7 @@
     "Website": "https://github.com/Aytackydln",
     "Repository": "https://github.com/Aytackydln/Artemis.Plugins.Games.Witcher3",
     "Icon": "QuestionMark",
-    "Version": "1.0.0.0",
+    "Version": "1.1.0.0",
     "Main": "Artemis.Plugins.Games.Witcher3.dll",
     "AutoEnableProperties": true,
     "RequiresAdmin": false,
